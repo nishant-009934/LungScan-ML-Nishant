@@ -12,7 +12,7 @@ Mr. Kishalay Bairagi, Assistant Professor, Department of CSE (AI & ML), Narula I
 
 **I. ABSTRACT**
 
-Lung cancer continues to be the leading cause of cancer-related mortality globally, necessitating robust and timely early detection methodologies to improve patient survival rates. Traditional manual interpretation of computed tomography (CT) scans by radiologists is heavily burdened by inter-observer variability, high false positive rates, and significant time constraints. To address these limitations, this paper proposes a novel, end-to-end clinical diagnostic pipeline driven by a custom-built Convolutional Neural Network (CNN) dubbed **AdvancedLungNet**. Unlike conventional approaches that rely on pre-trained external models, this architecture is engineered from scratch, integrating Residual skip connections and Squeeze-and-Excitation (SE) attention blocks to aggressively extract highly discriminative spatiotemporal features from the Kaggle Chest CT-Scan dataset. To bridge the gap between algorithmic decisions and clinical interpretability, Gradient-weighted Class Activation Mapping (Grad-CAM) is integrated, generating heatmaps that visually explain the model's focus on nodule spiculation and boundaries. Experimental evaluations demonstrate exceptional performance, with the optimized model achieving 100.00% accuracy, 1.000 F1-Score, and an AUC-ROC of 1.000 on the validation subset, proving the robust discriminative power of the SE-ResNet topology. Furthermore, the pipeline is deployed via a highly professional, hospital-grade Streamlit Web Application that automatically generates and exports formal, legally-disclaimed PDF clinical assessment reports, paving the way for trustworthy and immediately usable computer-aided diagnosis systems in clinical oncology.
+Lung cancer continues to be the leading cause of cancer-related mortality globally, necessitating robust and timely early detection methodologies to improve patient survival rates. Traditional manual interpretation of computed tomography (CT) scans by radiologists is heavily burdened by inter-observer variability, high false positive rates, and significant time constraints. To address these limitations, this paper proposes a novel, end-to-end clinical diagnostic pipeline driven by a custom-built Convolutional Neural Network (CNN) dubbed **AdvancedLungNet**. Unlike conventional approaches that rely on pre-trained external models, this architecture is engineered from scratch, integrating Residual skip connections and Squeeze-and-Excitation (SE) attention blocks to aggressively extract highly discriminative spatiotemporal features from the Kaggle Chest CT-Scan dataset. To bridge the gap between algorithmic decisions and clinical interpretability, Gradient-weighted Class Activation Mapping (Grad-CAM) is integrated, generating heatmaps that visually explain the model's focus on nodule spiculation and boundaries. Experimental evaluations demonstrate exceptional performance, with the optimized model achieving 98.75% accuracy, 0.991 F1-Score, and an AUC-ROC of 0.998 on the validation subset, proving the robust discriminative power of the SE-ResNet topology. Furthermore, the pipeline is deployed via a Streamlit Web Application that automatically generates and exports formal PDF clinical assessment reports, paving the way for trustworthy and immediately usable computer-aided diagnosis systems in clinical oncology.
 
 **Keywords:** Lung cancer detection, CT scan analysis, AdvancedLungNet, Squeeze-and-Excitation, ResNet, Grad-CAM, Streamlit, clinical reporting.
 
@@ -24,7 +24,7 @@ Lung cancer remains the preeminent cause of cancer-related mortality worldwide, 
 
 The current gold standard for early lung cancer screening relies on low-dose computed tomography (LDCT) scans, followed by detailed manual interpretation by expert radiologists. However, this workflow is fraught with limitations, including high inter-observer variability, substantial false-positive rates, and radiologist fatigue. To mitigate these challenges, Computer-Aided Detection (CAD) systems driven by Deep Learning have emerged as critical second-reader tools. 
 
-While recent advances often leverage massive, pre-trained architectures (e.g., VGG, DenseNet), these models are frequently over-parameterized for binary medical tasks and act as opaque "black boxes." Therefore, the motivation for this study is to develop a highly specialized, custom CNN architecture—**AdvancedLungNet**—that eschews external weights in favor of targeted Squeeze-and-Excitation attention mechanisms. Additionally, a critical barrier to AI adoption in healthcare is the lack of clinical integration. This paper addresses that gap by coupling the high-accuracy model with a professional-grade web dashboard capable of outputting formatted, downloadable PDF medical reports, ensuring seamless integration into modern hospital IT environments.
+While recent advances often leverage massive, pre-trained architectures (e.g., VGG, DenseNet), these models are frequently over-parameterized for binary medical tasks and act as opaque "black boxes." Therefore, the motivation for this study is to develop a highly specialized, custom CNN architecture—**AdvancedLungNet**—that eschews external weights in favor of targeted Squeeze-and-Excitation attention mechanisms. Additionally, a critical barrier to AI adoption in healthcare is the lack of clinical integration. This paper addresses that gap by coupling the high-accuracy model with a web dashboard capable of outputting formatted, downloadable PDF medical reports, ensuring seamless integration into modern hospital IT environments.
 
 ---
 
@@ -77,7 +77,7 @@ To solve the "black-box" problem of Deep Learning, Gradient-weighted Class Activ
 
 **D. Clinical UI and Automated PDF Reporting**
 
-The final component of the pipeline is a professional web dashboard built using Streamlit. The UI features a premium, glassmorphism design resembling hospital diagnostic software. Crucially, the system features automated PDF report generation utilizing the `fpdf2` engine. Upon completing an inference pass, the app synthesizes patient demographics, algorithmic findings, Grad-CAM visualizations, and a clinical recommendation into a formatted, printable medical document, bridging the gap between AI and clinical administration.
+The final component of the pipeline is a web dashboard built using Streamlit. The UI features a clean design for diagnostic analysis. Crucially, the system features automated PDF report generation utilizing the `fpdf2` engine. Upon completing an inference pass, the app synthesizes patient demographics, algorithmic findings, Grad-CAM visualizations, and a clinical recommendation into a formatted, printable medical document, bridging the gap between AI and clinical administration.
 
 ---
 
@@ -89,7 +89,7 @@ The architecture was implemented using Python 3.10 and the PyTorch deep learning
 
 **B. Quantitative Performance**
 
-The performance of AdvancedLungNet was evaluated on a strict validation subset. Driven by the efficiency of the SE-ResNet blocks and the dynamic learning rate scheduler, the model achieved unprecedented convergence.
+The performance of AdvancedLungNet was evaluated on a strict validation subset. Driven by the efficiency of the SE-ResNet blocks and the dynamic learning rate scheduler, the model achieved stable convergence.
 
 TABLE I. FINAL PERFORMANCE METRICS (AdvancedLungNet)
 
@@ -113,7 +113,7 @@ TABLE II. CONFUSION MATRIX (TEST SET)
 From the exact empirical evaluation on the newly expanded dataset, the model successfully identified 267 malignant nodules and 128 benign instances. The network achieved a perfect Precision score (0 false positives), alongside 5 false negatives, proving its extreme reliability as a clinical second-reader system without triggering false alarms.
 **C. Comparison with State-of-the-Art Methods**
 
-To validate the superiority of the custom AdvancedLungNet architecture, its performance was compared against five recent, highly-cited state-of-the-art models in the domain of lung nodule classification. As illustrated in TABLE II, the proposed SE-ResNet topology outperforms generic, pre-trained architectures. The integration of Squeeze-and-Excitation blocks allows the network to bypass the limitations of standard transfer learning, yielding unprecedented accuracy and perfect discrimination (AUC=1.000) on the evaluation dataset.
+To validate the superiority of the custom AdvancedLungNet architecture, its performance was compared against five recent, highly-cited state-of-the-art models in the domain of lung nodule classification. As illustrated in TABLE II, the proposed SE-ResNet topology outperforms generic, pre-trained architectures. The integration of Squeeze-and-Excitation blocks allows the network to bypass the limitations of standard transfer learning, yielding high accuracy and strong discrimination (AUC=0.998) on the evaluation dataset.
 
 TABLE II. COMPARISON WITH STATE-OF-THE-ART MODELS
 
@@ -124,19 +124,19 @@ TABLE II. COMPARISON WITH STATE-OF-THE-ART MODELS
 | Chen et al. [8] | Dual-pathway CNN | 93.4% | 0.952 |
 | Sharma et al. [9] | EfficientNet-B0 Optimization | 96.1% | 0.975 |
 | Zhang et al. [10] | Multi-scale Attention CNN | 95.8% | 0.970 |
-| **Proposed Work** | **AdvancedLungNet (Custom SE-ResNet)** | **100.0%** | **1.000** |
+| **Proposed Work** | **AdvancedLungNet (Custom SE-ResNet)** | **98.7%** | **0.998** |
 
 **D. Training Convergence Analysis**
 
-Analysis of the training logs demonstrates aggressive and stable convergence. The early epochs showed steady decreases in Binary Cross-Entropy Loss, while validation accuracy rapidly climbed. The `ReduceLROnPlateau` scheduler successfully navigated minor loss plateaus by halving the learning rate (e.g., dropping from 0.001 to 0.0005, and subsequently to 0.000125), resulting in the final optimal validation F1-Score of 1.000. 
+Analysis of the training logs demonstrates aggressive and stable convergence. The early epochs showed steady decreases in Binary Cross-Entropy Loss, while validation accuracy rapidly climbed. The `ReduceLROnPlateau` scheduler successfully navigated minor loss plateaus by halving the learning rate (e.g., dropping from 0.001 to 0.0005, and subsequently to 0.000125), resulting in the final optimal validation F1-Score of 0.991. 
 
 ---
 
 **VII. CONCLUSION**
 
-This study successfully engineered, trained, and deployed **AdvancedLungNet**, a custom-built SE-ResNet deep learning architecture for lung cancer detection. By combining the deep feature extraction capabilities of Residual networks with the channel-wise attention of Squeeze-and-Excitation blocks, the model achieved perfect validation metrics (100% Accuracy, 1.000 F1-Score) on the test dataset without relying on over-parameterized pre-trained external models. 
+This study successfully engineered, trained, and deployed **AdvancedLungNet**, a custom-built SE-ResNet deep learning architecture for lung cancer detection. By combining the deep feature extraction capabilities of Residual networks with the channel-wise attention of Squeeze-and-Excitation blocks, the model achieved strong validation metrics (98.75% Accuracy, 0.991 F1-Score) on the test dataset without relying on over-parameterized pre-trained external models. 
 
-Furthermore, the project successfully transitioned the AI from a raw computational script into a fully realized clinical tool. The integration of Grad-CAM provides necessary radiological explainability, while the professional Streamlit dashboard and automated PDF report generation prove that advanced AI can be seamlessly integrated into modern hospital administrative workflows. Future work will focus on expanding the dataset to encompass multi-class histopathological subtyping and deploying the software via a cloud-based API for remote, low-resource clinical environments.
+Furthermore, the project successfully transitioned the AI from a raw computational script into a fully realized clinical tool. The integration of Grad-CAM provides necessary radiological explainability, while the Streamlit dashboard and automated PDF report generation prove that advanced AI can be seamlessly integrated into modern hospital administrative workflows. Future work will focus on expanding the dataset to encompass multi-class histopathological subtyping and deploying the software via a cloud-based API for remote, low-resource clinical environments.
 
 ---
 
