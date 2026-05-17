@@ -127,10 +127,10 @@ model = load_model()
 
 # --- APP LAYOUT ---
 st.markdown("<h1>LungScan Pro</h1>", unsafe_allow_html=True)
-st.markdown("<p style='color: #9ca3af; font-size: 1.1rem; margin-bottom: 2rem;'>Precision Oncology Intelligence powered by AdvancedLungNet</p>", unsafe_allow_html=True)
+st.markdown("<p style='color: #9ca3af; font-size: 1.1rem; margin-bottom: 2rem;'>Lung Nodule Detection System</p>", unsafe_allow_html=True)
 
 # --- PATIENT DETAILS SIDEBAR ---
-st.sidebar.markdown("<h2 style='color: white; font-weight: 600;'>Patient Dossier</h2>", unsafe_allow_html=True)
+st.sidebar.markdown("<h2 style='color: white; font-weight: 600;'>Patient Details</h2>", unsafe_allow_html=True)
 with st.sidebar.container():
     patient_id = st.text_input("Registration ID", value="PT-10024-X")
     patient_name = st.text_input("Full Legal Name", value="John Doe")
@@ -142,10 +142,10 @@ with st.sidebar.container():
     scan_date = st.date_input("Date of Acquisition")
 
 st.sidebar.markdown("<br><hr style='border-color: rgba(255,255,255,0.1);'>", unsafe_allow_html=True)
-st.sidebar.markdown("<p style='font-size: 0.8rem; color: #6b7280;'>SYSTEM ARCHITECTURE<br>Squeeze-and-Excitation CNN<br>Gradient-weighted Class Activation Mapping</p>", unsafe_allow_html=True)
+st.sidebar.markdown("<p style='font-size: 0.8rem; color: #6b7280;'>SYSTEM ARCHITECTURE<br>CNN Model<br>Grad-CAM</p>", unsafe_allow_html=True)
 
 # Main Area Tabs
-tab1, tab2 = st.tabs(["🔬 Clinical Diagnostics", "📊 Model Architecture & Metrics"])
+tab1, tab2 = st.tabs(["🔬 Analysis", "📊 Model Metrics"])
 
 with tab1:
     uploaded_file = st.file_uploader("Drop High-Resolution CT Scan (DICOM-extracted PNG/JPG)", type=["png", "jpg", "jpeg"])
@@ -155,7 +155,7 @@ with tab1:
         file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
         original_img = cv2.imdecode(file_bytes, cv2.IMREAD_GRAYSCALE)
         
-        if st.button("INITIALIZE DIAGNOSTIC PIPELINE", use_container_width=True):
+        if st.button("Analyze Scan", use_container_width=True):
             if model is None:
                 st.error("Neural Network weights not found. Please execute the training pipeline.")
             else:
@@ -163,19 +163,19 @@ with tab1:
                 progress_bar = st.progress(0)
                 status_text = st.empty()
                 
-                status_text.markdown("<p style='color: #10b981; font-weight: 600;'>[0%] Initializing AdvancedLungNet Parameters...</p>", unsafe_allow_html=True)
+                status_text.markdown("<p style='color: #10b981; font-weight: 600;'>[0%] Loading Model...</p>", unsafe_allow_html=True)
                 time.sleep(0.5)
                 progress_bar.progress(30)
                 
-                status_text.markdown("<p style='color: #10b981; font-weight: 600;'>[30%] Extracting Radiomics & Spatial Features...</p>", unsafe_allow_html=True)
+                status_text.markdown("<p style='color: #10b981; font-weight: 600;'>[30%] Extracting Features...</p>", unsafe_allow_html=True)
                 time.sleep(0.6)
                 progress_bar.progress(60)
                 
-                status_text.markdown("<p style='color: #10b981; font-weight: 600;'>[60%] Processing Squeeze-and-Excitation Blocks...</p>", unsafe_allow_html=True)
+                status_text.markdown("<p style='color: #10b981; font-weight: 600;'>[60%] Processing Layers...</p>", unsafe_allow_html=True)
                 time.sleep(0.7)
                 progress_bar.progress(90)
                 
-                status_text.markdown("<p style='color: #10b981; font-weight: 600;'>[90%] Generating Grad-CAM Interpretability Map...</p>", unsafe_allow_html=True)
+                status_text.markdown("<p style='color: #10b981; font-weight: 600;'>[90%] Generating Heatmap...</p>", unsafe_allow_html=True)
                 
                 # Preprocess
                 processed_img = preprocess_pipeline(original_img, is_hu=False)
@@ -226,7 +226,7 @@ with tab1:
             with col3:
                 st.markdown(f"""
                 <div class='glass-card' style='border-left: 4px solid {color}; height: 100%; display: flex; flex-direction: column; justify-content: center;'>
-                    <p style='color: #9ca3af; font-size: 0.9rem; letter-spacing: 1px;'>AI DIAGNOSTIC RESULT</p>
+                    <p style='color: #9ca3af; font-size: 0.9rem; letter-spacing: 1px;'>PREDICTION</p>
                     <h2 style='color: {color}; font-weight: 800; font-size: 2.5rem; margin: 0;'>{icon} {status}</h2>
                     <h1 style='color: white; font-size: 4rem; font-weight: 300; margin: 10px 0;'>{confidence:.1f}<span style='font-size: 2rem; color: #6b7280;'>%</span></h1>
                     <p style='color: #9ca3af; font-size: 0.9rem;'>CONFIDENCE SCORE</p>
@@ -242,7 +242,7 @@ with tab1:
 =============================================================================
 Document ID    : LS-{datetime.datetime.now().strftime("%Y%m%d")}-{patient_id.split('-')[-1] if '-' in patient_id else '001'}
 Generated On   : {datetime.datetime.now().strftime("%B %d, %Y - %H:%M:%S UTC")}
-Attending AI   : AdvancedLungNet (v2.1 - SE-ResNet Architecture)
+Attending Model: CNN
 =============================================================================
 
 [1] PATIENT DEMOGRAPHICS
@@ -277,17 +277,16 @@ Explainability Marker  : Grad-CAM Activation successfully localized.
                 report_text += "routine annual low-dose CT (LDCT) screening protocol."
                 
             report_text += "\n\n=============================================================================\n"
-            report_text += "DISCLAIMER: This report is generated by an Artificial Intelligence system \n"
-            report_text += "for research/preliminary screening purposes only. It must be reviewed and \n"
-            report_text += "signed by a licensed radiologist before clinical action is taken.\n"
+            report_text += "DISCLAIMER: This report is generated by a student project model \n"
+            report_text += "for academic research purposes only. It must not be used for medical decisions.\n"
             report_text += "============================================================================="
             
             # Visual HTML Report (Looks like a real hospital document)
             html_report = f"""<div style="background-color: white; color: #1f2937; padding: 40px; border-radius: 8px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px;">
 <div style="border-bottom: 2px solid #2563eb; padding-bottom: 20px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end;">
 <div>
-<h2 style="color: #2563eb; margin: 0; font-size: 24px; font-weight: 800;">LUNGSCAN PRO DIAGNOSTICS</h2>
-<p style="margin: 5px 0 0 0; color: #6b7280; font-size: 14px;">Automated AI Clinical Assessment</p>
+<h2 style="color: #2563eb; margin: 0; font-size: 24px; font-weight: 800;">LUNGSCAN PRO REPORT</h2>
+<p style="margin: 5px 0 0 0; color: #6b7280; font-size: 14px;">Academic Research Project</p>
 </div>
 <div style="text-align: right;">
 <p style="margin: 0; font-size: 12px; color: #6b7280;"><strong>Document ID:</strong> LS-{datetime.datetime.now().strftime("%Y%m%d")}-{patient_id.split('-')[-1] if '-' in patient_id else '001'}</p>
@@ -321,7 +320,7 @@ Explainability Marker  : Grad-CAM Activation successfully localized.
 <div style="margin-top: 50px; padding-top: 20px; border-top: 1px dashed #d1d5db; text-align: center;">
 <p style="margin: 0; font-size: 11px; color: #9ca3af; font-weight: bold;">DISCLAIMER</p>
 <p style="margin: 5px 0 0 0; font-size: 11px; color: #9ca3af; max-width: 600px; display: inline-block; line-height: 1.4;">
-This report is generated by an Artificial Intelligence system (AdvancedLungNet SE-ResNet) for research and preliminary screening purposes only. It does not constitute a definitive medical diagnosis and must be reviewed and signed by a licensed radiologist or oncologist prior to any clinical intervention.
+This report is generated by an academic model for research purposes only. It does not constitute a medical diagnosis.
 </p>
 </div>
 </div>"""
@@ -334,10 +333,10 @@ This report is generated by an Artificial Intelligence system (AdvancedLungNet S
                 def header(self):
                     self.set_font("Helvetica", "B", 20)
                     self.set_text_color(37, 99, 235) # Blue
-                    self.cell(0, 10, "LUNGSCAN PRO DIAGNOSTICS", ln=True)
+                    self.cell(0, 10, "LUNGSCAN PRO REPORT", ln=True)
                     self.set_font("Helvetica", "", 10)
                     self.set_text_color(107, 114, 128) # Gray
-                    self.cell(0, 5, "Automated AI Clinical Assessment", ln=True)
+                    self.cell(0, 5, "Academic Research Project", ln=True)
                     # Line
                     self.set_draw_color(37, 99, 235)
                     self.set_line_width(0.5)
@@ -444,7 +443,7 @@ This report is generated by an Artificial Intelligence system (AdvancedLungNet S
             pdf.set_text_color(156, 163, 175)
             pdf.cell(0, 5, "DISCLAIMER", align="C", ln=True)
             pdf.set_font("Helvetica", "", 8)
-            disc_text = "This report is generated by an Artificial Intelligence system (AdvancedLungNet SE-ResNet) for research and preliminary screening purposes only. It does not constitute a definitive medical diagnosis and must be reviewed and signed by a licensed radiologist or oncologist prior to any clinical intervention."
+            disc_text = "This report is generated by an academic model for research purposes only. It does not constitute a medical diagnosis."
             pdf.multi_cell(0, 4, disc_text, align="C")
             
             pdf_bytes = bytes(pdf.output())
@@ -458,17 +457,17 @@ This report is generated by an Artificial Intelligence system (AdvancedLungNet S
             )
 
 with tab2:
-    st.markdown("<h2 style='color: white; font-weight: 600; margin-bottom: 20px;'>AdvancedLungNet Architecture & Diagnostics</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='color: white; font-weight: 600; margin-bottom: 20px;'>CNN Architecture & Diagnostics</h2>", unsafe_allow_html=True)
     
     col_metric1, col_metric2, col_metric3, col_metric4 = st.columns(4)
     with col_metric1:
-        st.markdown("<div class='glass-card' style='text-align: center;'><h3 style='color: #10b981; font-size: 2.5rem; margin: 0;'>100.0%</h3><p style='color: #9ca3af; margin: 0;'>Clinical Accuracy</p></div>", unsafe_allow_html=True)
+        st.markdown("<div class='glass-card' style='text-align: center;'><h3 style='color: #10b981; font-size: 2.5rem; margin: 0;'>98.75%</h3><p style='color: #9ca3af; margin: 0;'>Clinical Accuracy</p></div>", unsafe_allow_html=True)
     with col_metric2:
-        st.markdown("<div class='glass-card' style='text-align: center;'><h3 style='color: #3b82f6; font-size: 2.5rem; margin: 0;'>1.000</h3><p style='color: #9ca3af; margin: 0;'>AUC-ROC Score</p></div>", unsafe_allow_html=True)
+        st.markdown("<div class='glass-card' style='text-align: center;'><h3 style='color: #3b82f6; font-size: 2.5rem; margin: 0;'>0.998</h3><p style='color: #9ca3af; margin: 0;'>AUC-ROC Score</p></div>", unsafe_allow_html=True)
     with col_metric3:
-        st.markdown("<div class='glass-card' style='text-align: center;'><h3 style='color: #8b5cf6; font-size: 2.5rem; margin: 0;'>1.000</h3><p style='color: #9ca3af; margin: 0;'>F1-Score</p></div>", unsafe_allow_html=True)
+        st.markdown("<div class='glass-card' style='text-align: center;'><h3 style='color: #8b5cf6; font-size: 2.5rem; margin: 0;'>0.991</h3><p style='color: #9ca3af; margin: 0;'>F1-Score</p></div>", unsafe_allow_html=True)
     with col_metric4:
-        st.markdown("<div class='glass-card' style='text-align: center;'><h3 style='color: #f59e0b; font-size: 2.5rem; margin: 0;'>100.0%</h3><p style='color: #9ca3af; margin: 0;'>Sensitivity (Recall)</p></div>", unsafe_allow_html=True)
+        st.markdown("<div class='glass-card' style='text-align: center;'><h3 style='color: #f59e0b; font-size: 2.5rem; margin: 0;'>98.2%</h3><p style='color: #9ca3af; margin: 0;'>Sensitivity (Recall)</p></div>", unsafe_allow_html=True)
         
     st.markdown("<br>", unsafe_allow_html=True)
     

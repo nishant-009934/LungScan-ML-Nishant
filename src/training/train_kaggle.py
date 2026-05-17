@@ -63,17 +63,14 @@ def download_and_extract_kaggle():
         
     return True
 
-def train_professional_model(max_epochs=5, batch_size=16):
+def train_model(max_epochs=20, batch_size=16):
     """
-    Trains AdvancedLungNet with enterprise-grade evaluation metrics and learning rate scheduling.
+    Trains the CNN model and evaluates metrics.
     """
     base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
     dataset_path = os.path.join(base_dir, 'dataset')
     
-    print("\n=======================================================")
-    print("   INITIALIZING PROFESSIONAL TRAINING PIPELINE")
-    print("   Architecture: AdvancedLungNet (Res+SE Blocks)")
-    print("=======================================================\n")
+    print("\nStarting model training...")
     
     dataset = LungDataset(dataset_path, is_train=True)
     val_dataset_full = LungDataset(dataset_path, is_train=False) # No augmentations for validation
@@ -136,7 +133,7 @@ def train_professional_model(max_epochs=5, batch_size=16):
                 all_preds.extend(preds.numpy().flatten())
                 all_labels.extend(labels.numpy().flatten())
                 
-        # Calculate Professional Metrics
+        # Calculate Metrics
         acc = accuracy_score(all_labels, all_preds)
         prec = precision_score(all_labels, all_preds, zero_division=0)
         rec = recall_score(all_labels, all_preds, zero_division=0)
@@ -157,9 +154,7 @@ def train_professional_model(max_epochs=5, batch_size=16):
             torch.save(model.state_dict(), save_path)
             print(f"  * New best model saved! (F1: {f1:.4f})")
             
-    print("\n=======================================================")
-    print("   FINAL EVALUATION REPORT (BEST MODEL)")
-    print("=======================================================")
+    print("\n--- Final Evaluation ---")
     print(f"   Accuracy    : {acc*100:.2f}%")
     print(f"   Precision   : {prec*100:.2f}%")
     print(f"   Sensitivity : {rec*100:.2f}%  (Recall)")
@@ -170,4 +165,4 @@ def train_professional_model(max_epochs=5, batch_size=16):
 
 if __name__ == "__main__":
     # download_and_extract_kaggle() bypassed since we already downloaded the massive IQ-OTH/NCCD dataset.
-    train_professional_model()
+    train_model()
